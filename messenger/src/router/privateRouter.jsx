@@ -1,4 +1,5 @@
-import Messenger from "../pages/messenger/messenger";
+import ActivationAfterLogin from "../pages/auth/ActivationAfterLogin";
+import Messenger from "../pages/messenger/Messenger";
 import PrivateGard from "./PrivateGard";
 
 // create Private router
@@ -9,6 +10,10 @@ const privateRouter = [
       {
         path: "/",
         element: <Messenger />,
+      },
+      {
+        path: "/activate-after-login",
+        element: <ActivationAfterLogin />,
       },
     ],
   },

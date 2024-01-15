@@ -1,0 +1,115 @@
+.top-bar {
+  width: 100%;
+  box-shadow: var(--messenger-shadow);
+  padding: 5px 0px;
+
+  .topbar-container {
+    padding: 0px 20px;
+    display: flex;
+    justify-content: space-between;
+
+    .topbar-search {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 30%;
+      a {
+        display: block;
+        transform: translate(0px, 3px);
+        img {
+          width: 40px;
+          height: 40px;
+        }
+      }
+
+      .search {
+        position: relative;
+        input {
+          padding: 9px 10px 9px 30px;
+          border-radius: 50px;
+          border: 1px solid var(--messenger-gray);
+          background-color: var(--messenger-gray);
+          width: 278px;
+        }
+
+        svg {
+          position: absolute;
+          left: 10px;
+          top: 10px;
+        }
+      }
+    }
+
+    .topbar-menu {
+      width: 40%;
+      display: flex;
+      justify-content: center;
+      ul {
+        width: 500px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 100%;
+        gap: 5px;
+
+        li {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          height: 100%;
+          width: 200px;
+          border-radius: 5px;
+          cursor: pointer;
+          &:hover {
+            background-color: var(--messenger-gray);
+          }
+          a {
+            font-size: 30px;
+            color: #333;
+          }
+        }
+      }
+    }
+
+    .topbar-user {
+      width: 30%;
+      display: flex;
+      justify-content: flex-end;
+      position: relative;
+
+      button {
+        border: none;
+        background-color: transparent;
+        cursor: pointer;
+        img {
+          width: 40px;
+          height: 40px;
+          object-fit: cover;
+          border-radius: 50%;
+        }
+      }
+
+      .drop-down-menu {
+        background-color: white;
+        box-shadow: var(--messenger-shadow);
+        padding: 15px;
+        border-radius: 10px;
+        position: absolute;
+        top: 103%;
+        right: 0px;
+
+        ul {
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+
+          li {
+            a {
+              color: #333;
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,7 +1,12 @@
 import React from "react";
+import TopBar from "../../components/TopBar/TopBar";
 
 const Messenger = () => {
-  return <div>messenger</div>;
+  return (
+    <>
+      <TopBar />
+    </>
+  );
 };
 
 export default Messenger;
