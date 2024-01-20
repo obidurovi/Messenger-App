@@ -39,14 +39,14 @@ export const randStr = (length = 12) => {
 // Dot to hy
 export const dotsToHyphens = (inputString) => {
   // Use the replace method with a regular expression to replace dots with hyphens
-  const stringWithHyphens = inputString.replace(/\./g, "-");
+  const stringWithHyphens = inputString.replace(/\./g, "ovito");
   return stringWithHyphens;
 };
 
 // Hyphens to dot
 export const hyphensToDots = (inputString) => {
   // Use the replace method with a regular expression to replace hyphens with dots
-  const stringWithDots = inputString.replace(/-/g, ".");
+  const stringWithDots = inputString.replace(/ovito/g, ".");
   return stringWithDots;
 };
 
@@ -121,4 +121,38 @@ export const createOTP = (length = 5) => {
   }
 
   return otp;
+};
+
+// hide email middle part
+export const hideMobileNumber = (email) => {
+  // mobile number
+  const mobileArr = email.split("");
+
+  // get the firstr and last characters of the email
+  const firstChar = mobileArr[0] + mobileArr[1] + mobileArr[2];
+  const lastChar = email.charAt(email.length - 1);
+
+  // replace characters in the middle with "*"
+  const middlePart = email.slice(1, -1).replace(/./g, "*");
+
+  // concatenate the first, middle, and last characters
+  const hiddenEmail = firstChar + middlePart + lastChar;
+
+  return hiddenEmail;
+};
+export const hideEmailMiddle = (email) => {
+  // get email main part
+  const emailMain = email.split("@");
+
+  // get the firstr and last characters of the email
+  const firstChar = emailMain[0].charAt(0);
+  const lastChar = emailMain[0].charAt(emailMain[0].length - 1);
+
+  // replace characters in the middle with "*"
+  const middlePart = emailMain[0].slice(1, -1).replace(/./g, "*");
+
+  // concatenate the first, middle, and last characters
+  const hiddenEmail = firstChar + middlePart + lastChar + "@" + emailMain[1];
+
+  return hiddenEmail;
 };

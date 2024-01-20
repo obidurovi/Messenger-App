@@ -5,11 +5,7 @@ const PrivateGard = () => {
   const { user } = useSelector((state) => state.auth);
 
   if (user) {
-    if (user.accessToken != null) {
-      return <Navigate to="/activate-after-login" />;
-    } else {
-      return <Outlet />;
-    }
+    return <Outlet />;
   } else {
     return <Navigate to="/login" />;
   }

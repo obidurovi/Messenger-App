@@ -21,87 +21,89 @@ const TopBar = () => {
   };
 
   return (
-    <div className="top-bar">
-      <div className="topbar-container">
-        <div className="topbar-search">
-          <Link to="/">
-            <img
-              src="https://static-00.iconduck.com/assets.00/messenger-icon-512x512-5pi1qivq.png"
-              alt=""
-            />
-          </Link>
-          <div className="search">
-            <input type="text" placeholder="Search Messenger" />
-            <CiSearch />
-          </div>
-        </div>
-        <div className="topbar-menu">
-          <ul>
-            <li>
-              <Link to="/">
-                <CiHome />
-              </Link>
-            </li>
-            <li>
-              <Link to="/">
-                <FiUsers />
-              </Link>
-            </li>
-            <li>
-              <Link to="/">
-                <CiVideoOn />
-              </Link>
-            </li>
-            <li>
-              <Link to="/">
-                <CiShop />
-              </Link>
-            </li>
-          </ul>
-        </div>
-        <div className="topbar-user">
-          <button onClick={toggleMenu}>
-            {user.photo ? (
-              <img src={user.photo} />
-            ) : (
+    <>
+      <div className="top-bar">
+        <div className="topbar-container">
+          <div className="topbar-search">
+            <Link to="/">
               <img
-                src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8dXNlcnxlbnwwfHwwfHx8MA%3D%3D"
+                src="https://static-00.iconduck.com/assets.00/messenger-icon-512x512-5pi1qivq.png"
                 alt=""
               />
-            )}
-          </button>
-
-          {isOpen && (
-            <div className="drop-down-menu dropdown">
-              <ul>
-                <li>
-                  <Link to="/">
-                    <MdDarkMode />
-                    Dark Mode
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/">
-                    <CiEdit />
-                    Edit
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/">
-                    <FaLock /> Password Change
-                  </Link>
-                </li>
-                <li>
-                  <Link onClick={handleUserLogout}>
-                    <IoIosLogOut /> Logout
-                  </Link>
-                </li>
-              </ul>
+            </Link>
+            <div className="search">
+              <input type="text" placeholder="Search Messenger" />
+              <CiSearch />
             </div>
-          )}
+          </div>
+          <div className="topbar-menu">
+            <ul>
+              <li>
+                <Link to="/">
+                  <CiHome />
+                </Link>
+              </li>
+              <li>
+                <Link to="/">
+                  <FiUsers />
+                </Link>
+              </li>
+              <li>
+                <Link to="/">
+                  <CiVideoOn />
+                </Link>
+              </li>
+              <li>
+                <Link to="/">
+                  <CiShop />
+                </Link>
+              </li>
+            </ul>
+          </div>
+          <div className="topbar-user">
+            <button onClick={toggleMenu}>
+              {user.photo ? (
+                <img src={user.photo} />
+              ) : (
+                <img
+                  src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8dXNlcnxlbnwwfHwwfHx8MA%3D%3D"
+                  alt=""
+                />
+              )}
+            </button>
+
+            {isOpen && (
+              <div className="drop-down-menu dropdown">
+                <ul>
+                  <li>
+                    <Link to="/">
+                      <MdDarkMode />
+                      Dark Mode
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/">
+                      <CiEdit />
+                      Edit
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/">
+                      <FaLock /> Password Change
+                    </Link>
+                  </li>
+                  <li>
+                    <Link onClick={handleUserLogout}>
+                      <IoIosLogOut /> Logout
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+            )}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

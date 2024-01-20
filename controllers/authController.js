@@ -274,7 +274,9 @@ export const accountActivateByOTP = asyncHandler(async (req, res) => {
   // clear cookie from browser
   res.clearCookie("verifyToken");
 
-  return res.status(200).json({ message: "User activation successfull" });
+  return res
+    .status(200)
+    .json({ message: "User activation successfull", user: activateUser });
 });
 /**
  * Account activate by url
@@ -322,4 +324,77 @@ export const accountActivateByLink = asyncHandler(async (req, res) => {
   res.clearCookie("verifyToken");
 
   return res.status(200).json({ message: "User activation successfull" });
+});
+
+/**
+ *
+ */
+export const resendAccountActivation = asyncHandler(async (req, res) => {
+  const { auth } = req.params;
+
+  // create a access token for account activation
+  const activationCode = createOTP();
+
+  // get auth
+  let authEmail = null;
+  let authPhone = null;
+  let authUser = null;
+
+  if (isMobile(auth)) {
+    authPhone = auth;
+
+    // check mobile exist or not
+    authUser = await User.findOne({ phone: auth });
+
+    // create verification token
+    const verifyToken = jwt.sign(
+      { auth: auth },
+      process.env.ACCESS_TOKEN_SECRET,
+      {
+        expiresIn: "15m",
+      }
+    );
+
+    res.cookie("verifyToken", verifyToken);
+
+    // send otp to user mobile
+    await sendSMS(
+      auth,
+      `Hello ${authUser.name}! Your account activation code is: ${activationCode}`
+    );
+  } else if (isEmail(auth)) {
+    authEmail = auth;
+    // check mobile exist or not
+    authUser = await User.findOne({ email: auth });
+
+    // create verification token
+    const verifyToken = jwt.sign(
+      { auth: auth },
+      process.env.ACCESS_TOKEN_SECRET,
+      {
+        expiresIn: "15m",
+      }
+    );
+
+    res.cookie("verifyToken", verifyToken);
+
+    // activation link
+    const activationLink = `http://localhost:3000/activation/${dotsToHyphens(
+      verifyToken
+    )}`;
+
+    // send activation link to email
+    await ActivationEmail(auth, {
+      name: authUser.name,
+      code: activationCode,
+      link: activationLink,
+    });
+  }
+
+  authUser.accessToken = activationCode;
+  authUser.save();
+
+  res.status(200).json({
+    message: "Activation Code Send Successfully",
+  });
 });

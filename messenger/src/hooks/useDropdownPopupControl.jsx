@@ -10,7 +10,6 @@ const useDropdownPopupControl = () => {
   };
 
   const handleClickOutside = (e) => {
-    console.log(e.target);
     if (dropDownRef.current && !dropDownRef.current.contains(e.target)) {
       setIsOpen(false);
     }
