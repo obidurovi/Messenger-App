@@ -1,0 +1,258 @@
+.chat-container {
+  width: 100%;
+  height: 93vh;
+  display: flex;
+  justify-content: center;
+
+  .chat-users {
+    flex: 1;
+    border-right: 1px solid var(--messenger-gray);
+
+    .chat-users-header {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: 20px 15px;
+
+      .chat-users-header-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        h2 {
+          font-size: 22px;
+        }
+
+        .btns {
+          display: flex;
+          gap: 10px;
+
+          button {
+            border: none;
+            cursor: pointer;
+            width: 20px;
+            height: 20px;
+            background-color: var(--messenger-gray);
+            line-height: 20px;
+            font-size: 20px;
+            border-radius: 50%;
+            padding: 10px;
+            box-sizing: content-box;
+          }
+        }
+      }
+
+      .chat-users-header-search {
+        display: flex;
+        position: relative;
+
+        input {
+          flex: 1;
+          padding: 7px 7px 7px 30px;
+          background-color: var(--messenger-gray);
+          border: none;
+          border-radius: 100px;
+        }
+
+        button {
+          position: absolute;
+          left: 10px;
+          top: 6px;
+          font-size: 18px;
+          background-color: transparent;
+          border: none;
+          cursor: pointer;
+        }
+      }
+
+      .chat-users-header-menu {
+        display: flex;
+        gap: 10px;
+
+        button {
+          font-size: 14px;
+          background-color: #fff;
+          border: none;
+          border-radius: 100px;
+          cursor: pointer;
+          background-color: var(--messenger-gray);
+          padding: 7px;
+        }
+
+        button.active {
+          background-color: var(--messenger-blue-hover);
+          color: var(--messenger-blue);
+        }
+      }
+    }
+
+    .chat-users-list {
+      display: flex;
+      gap: 5px;
+      flex-direction: column;
+      padding: 20px 0px;
+      overflow: auto;
+      height: 77vh;
+      padding: 0px 15px;
+
+      .active {
+        background-color: var(--messenger-blue-hover);
+      }
+      .user-item {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        cursor: pointer;
+        padding: 10px;
+        border-radius: 5px;
+
+        &:hover {
+          background-color: var(--messenger-gray);
+        }
+
+        img {
+          width: 70px;
+          height: 70px;
+          border-radius: 50%;
+          object-fit: cover;
+        }
+
+        .user-details {
+          display: flex;
+          flex-direction: column;
+
+          .user-name {
+            font-weight: 600;
+            font-size: 14px;
+          }
+
+          .user-chat-info {
+            font-size: 12px;
+            display: flex;
+            gap: 10px;
+          }
+        }
+      }
+    }
+  }
+
+  .chat-body {
+    flex: 3;
+    border-right: 1px solid var(--messenger-gray);
+
+    .chat-body-active-user {
+      box-shadow: var(--messenger-shadow);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+
+      .chat-active-user-details {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        img {
+          width: 50px;
+          height: 50px;
+          border-radius: 50%;
+          object-fit: cover;
+        }
+
+        .chat-user-name {
+          font-weight: 400;
+        }
+      }
+
+      .chat-active-user-menu {
+        display: flex;
+        gap: 20px;
+
+        button {
+          background-color: transparent;
+          border: none;
+          cursor: pointer;
+          color: var(--messenger-blue);
+          font-size: 26px;
+        }
+      }
+    }
+
+    .chat-body-msg {
+      padding: 20px;
+      overflow: auto;
+      height: 84vh;
+      .chat-msg-profile {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        img {
+          width: 70px;
+          height: 70px;
+          border-radius: 50%;
+          object-fit: cover;
+        }
+      }
+
+      .chat-msg-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        .my-msg {
+          display: flex;
+          justify-content: flex-end;
+          flex-direction: column;
+          align-items: flex-end;
+          gap: 5px;
+
+          .msg-txt {
+            padding: 5px 10px;
+            border-radius: 10px;
+            background-color: var(--messenger-blue);
+            color: #fff;
+            max-width: 30%;
+          }
+
+          .msg-photo {
+            display: flex;
+            justify-content: flex-end;
+            img {
+              width: 300px;
+              border-radius: 10px;
+            }
+          }
+        }
+
+        .msg-time {
+          text-align: center;
+          font-size: 14px;
+        }
+
+        .friend-msg {
+          display: flex;
+          gap: 10px;
+          img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            object-fit: cover;
+            align-self: flex-end;
+          }
+
+          .friend-msg-details {
+            .msg-txt {
+              background-color: var(--messenger-gray);
+              padding: 10px;
+              width: 180px; //Should be change
+              border-radius: 10px;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .chat-profile {
+    flex: 1;
+  }
+}
