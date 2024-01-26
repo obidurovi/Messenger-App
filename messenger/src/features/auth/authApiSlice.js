@@ -122,3 +122,42 @@ export const resendActivation = createAsyncThunk(
     }
   }
 );
+
+// reset password
+export const resetPassword = createAsyncThunk(
+  "auth/resetPassword",
+  async (data) => {
+    try {
+      const response = await axios.post(
+        `http://localhost:5050/api/v1/auth/password-reset`,
+        data,
+        {
+          withCredentials: true,
+        }
+      );
+
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  }
+);
+// reset password
+export const resetPasswordAction = createAsyncThunk(
+  "auth/resetPassword",
+  async (data) => {
+    try {
+      const response = await axios.post(
+        `http://localhost:5050/api/v1/auth/password-reset-action/${data.token}`,
+        data.input,
+        {
+          withCredentials: true,
+        }
+      );
+
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  }
+);

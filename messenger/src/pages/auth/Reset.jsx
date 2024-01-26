@@ -1,30 +1,36 @@
-import React from "react";
 import PageHeader from "../../components/PageHeader/PageHeader";
 import AuthHeader from "../../components/AuthHeader/AuthHeader";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { createToast } from "../../utils/toast";
 import { getAuthData, setMessageEmpty } from "../../features/auth/authSlice";
 import useFormFields from "../../hooks/useFormFields";
+import {
+  resetPassword,
+  resetPasswordAction,
+} from "../../features/auth/authApiSlice";
+import { createToast } from "../../utils/toast";
 import { useEffect } from "react";
-import { resetPassword } from "../../features/auth/authApiSlice";
+import Cookie from "js-cookie";
 
-const Forgot = () => {
+export const Reset = () => {
   // hooks
   const dispatch = useDispatch();
   const { message, error, loader } = useSelector(getAuthData);
   const navigate = useNavigate();
+  const token = Cookie.get("verifyToken");
 
   // form feild manage
   const { input, handleInputChange, resetForm } = useFormFields({
-    auth: "",
+    newPassword: "",
+    confPassword: "",
+    otp: "",
   });
 
-  // handle reset pass
-  const handleSubmitPass = (e) => {
+  //   handle password reset
+  const handlePasswordReset = (e) => {
     e.preventDefault();
 
-    dispatch(resetPassword(input));
+    dispatch(resetPasswordAction({ token, input }));
   };
 
   useEffect(() => {
@@ -32,7 +38,7 @@ const Forgot = () => {
       createToast(message, "success");
       dispatch(setMessageEmpty());
       resetForm();
-      navigate("/reset-password");
+      navigate("/login");
     }
 
     if (error) {
@@ -53,12 +59,26 @@ const Forgot = () => {
             />
 
             <div className="auth-form">
-              <form onSubmit={handleSubmitPass}>
+              <form onSubmit={handlePasswordReset}>
                 <input
                   type="text"
-                  placeholder="Email or Phone Number"
-                  value={input.auth}
-                  name="auth"
+                  placeholder="New Password"
+                  value={input.newPassword}
+                  name="newPassword"
+                  onChange={handleInputChange}
+                />
+                <input
+                  type="text"
+                  placeholder="Confirm Password"
+                  value={input.confPassword}
+                  name="confPassword"
+                  onChange={handleInputChange}
+                />
+                <input
+                  type="text"
+                  placeholder="Password OTP"
+                  value={input.otp}
+                  name="otp"
                   onChange={handleInputChange}
                 />
                 <button type="submit" className="bg-fb">
@@ -75,5 +95,3 @@ const Forgot = () => {
     </>
   );
 };
-
-export default Forgot;

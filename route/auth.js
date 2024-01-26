@@ -8,6 +8,8 @@ import {
   accountActivateByOTP,
   accountActivateByLink,
   resendAccountActivation,
+  resetPassword,
+  resetPasswordAction,
 } from "../controllers/authController.js";
 import tokenVerify from "../middlewares/verifyToken.js";
 
@@ -21,6 +23,8 @@ router.route("/register").post(register);
 router.route("/activation-by-otp/:token").post(accountActivateByOTP);
 router.route("/activation-by-link/:token").post(accountActivateByLink);
 router.route("/resend-activation/:auth").get(resendAccountActivation);
+router.route("/password-reset").post(resetPassword);
+router.route("/password-reset-action/:token").post(resetPasswordAction);
 
 router.get("/me", tokenVerify, loggedInUser);
 

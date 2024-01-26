@@ -327,7 +327,7 @@ export const accountActivateByLink = asyncHandler(async (req, res) => {
 });
 
 /**
- *
+ *resend activation code
  */
 export const resendAccountActivation = asyncHandler(async (req, res) => {
   const { auth } = req.params;
@@ -397,4 +397,153 @@ export const resendAccountActivation = asyncHandler(async (req, res) => {
   res.status(200).json({
     message: "Activation Code Send Successfully",
   });
+});
+
+/**
+ * Reset Password
+ */
+export const resetPassword = asyncHandler(async (req, res) => {
+  const { auth } = req.body;
+
+  // create a access token for account activation
+  const activationCode = createOTP();
+
+  // reset user data
+  let resetUser = null;
+
+  if (isMobile(auth)) {
+    resetUser = await User.findOne({ phone: auth });
+
+    console.log(resetUser);
+
+    if (!resetUser) {
+      return res.status(400).json({
+        message: "User not found!",
+      });
+    }
+
+    // create verification token
+    const verifyToken = jwt.sign(
+      { auth: auth },
+      process.env.ACCESS_TOKEN_SECRET,
+      {
+        expiresIn: "15m",
+      }
+    );
+
+    res.cookie("verifyToken", verifyToken);
+
+    // send otp to user mobile
+    await sendSMS(
+      auth,
+      `Hello ${resetUser.name}! Your password reset code is: ${activationCode}`
+    );
+  } else if (isEmail(auth)) {
+    resetUser = await User.findOne({ email: auth });
+
+    console.log(resetUser);
+
+    if (!resetUser) {
+      return res.status(400).json({
+        message: "User not found!",
+      });
+    }
+
+    // create verification token
+    const verifyToken = jwt.sign(
+      { auth: auth, otp: activationCode },
+      process.env.ACCESS_TOKEN_SECRET,
+      {
+        expiresIn: "15m",
+      }
+    );
+
+    res.cookie("verifyToken", verifyToken);
+
+    // activation link
+    const activationLink = `http://localhost:3000/activation/${dotsToHyphens(
+      verifyToken
+    )}`;
+
+    // send activation link to email
+    await ActivationEmail(auth, {
+      name: resetUser.name,
+      code: activationCode,
+      link: activationLink,
+    });
+  } else {
+    return res.status(400).json({
+      message: "You must use Email address or Phone number",
+    });
+  }
+  resetUser.accessToken = activationCode;
+  resetUser.save();
+  res.status(200).json({
+    message: "Password Reset Code Sent Successfully",
+  });
+});
+
+/**
+ * Password Reset Action
+ */
+export const resetPasswordAction = asyncHandler(async (req, res) => {
+  const { token } = req.params;
+  const { newPassword, confPassword, otp } = req.body;
+
+  if (!newPassword) {
+    return res.status(400).json({ message: "Provide a password!" });
+  }
+  if (!confPassword) {
+    return res.status(400).json({ message: "Confirm your new password!" });
+  }
+  if (!token) {
+    return res.status(400).json({ message: "Token not found" });
+  }
+
+  if (!otp) {
+    return res.status(400).json({ message: "OTP not found" });
+  }
+  if (newPassword != confPassword) {
+    return res.status(400).json({ message: "Password doesnt match!" });
+  }
+
+  const verifyToken = hyphensToDots(token);
+
+  // verify token
+  const tokenCheck = jwt.verify(verifyToken, process.env.ACCESS_TOKEN_SECRET);
+
+  if (!tokenCheck) {
+    return res.status(400).json({ message: "Invalid Activation Request" });
+  }
+
+  // activate account now
+  let resetUser = null;
+
+  if (isMobile(tokenCheck.auth)) {
+    resetUser = await User.findOne({ phone: tokenCheck.auth });
+
+    if (!resetUser) {
+      return res.status(400).json({ message: "User Not Found" });
+    }
+  } else if (isEmail(tokenCheck.auth)) {
+    resetUser = await User.findOne({ email: tokenCheck.auth });
+
+    if (!resetUser) {
+      return res.status(400).json({ message: "User Not Found" });
+    }
+  } else {
+    return res.status(400).json({ message: "Auth Undefined" });
+  }
+
+  // check otp
+  if (otp != resetUser.accessToken) {
+    return res.status(400).json({ message: "OTP doesn't match!" });
+  }
+
+  // password hash
+  const hashPass = await bcrypt.hash(newPassword, 10);
+  resetUser.password = hashPass;
+  resetUser.accessToken = null;
+  resetUser.save();
+  return res.status(200).json({ message: "Password Updated" });
 });
