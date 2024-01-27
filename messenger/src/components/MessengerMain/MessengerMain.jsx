@@ -5,8 +5,22 @@ import { FaSearch } from "react-icons/fa";
 import { IoIosCall } from "react-icons/io";
 import { FaVideo } from "react-icons/fa";
 import { MdInfo } from "react-icons/md";
+import Gallery from "../../svgs/Gallery";
+import ThumbsUp from "../../svgs/ThumbsUp";
+import Smile from "../../svgs/Smile";
+import Plus from "../../svgs/Plus";
+import Sticker from "../../svgs/Sticker";
+import Gif from "../../svgs/Gif";
+import EmojiPicker from "emoji-picker-react";
+import useDropdownPopupControl from "../../hooks/useDropdownPopupControl";
+import Profile from "../../svgs/Profile";
+import Bell from "../../svgs/Bell";
+import Search from "../../svgs/Search";
+import Collapsible from "react-collapsible";
 
 const MessengerMain = () => {
+  const { isOpen, toggleMenu } = useDropdownPopupControl();
+
   return (
     <>
       <div className="chat-container">
@@ -312,13 +326,110 @@ const MessengerMain = () => {
           </div>
 
           <div className="chat-body-form">
-            <div className="chat-form-icons"></div>
+            <div className="chat-form-icons">
+              <ul>
+                <li>
+                  <Plus />
+                </li>
+                <li>
+                  <Gallery />
+                </li>
+                <li>
+                  <Sticker />
+                </li>
+                <li>
+                  <Gif />
+                </li>
+              </ul>
+            </div>
             <div className="chat-form-input">
-              <input type="text" />
+              <input type="text" placeholder="Aa" />
+              {isOpen && (
+                <div className="chat-emoji-picker">
+                  <EmojiPicker />
+                </div>
+              )}
+
+              <button className="emoji-btn" onClick={toggleMenu}>
+                <Smile />
+              </button>
+            </div>
+            <div className="chat-emoji">
+              <ThumbsUp />
             </div>
           </div>
         </div>
-        <div className="chat-profile">Profile</div>
+        <div className="chat-profile">
+          <div className="profile-info">
+            <img
+              src="https://powerpackelements.com/wp-content/uploads/2017/11/Team-memeber-01.png"
+              alt=""
+            />
+            <ul>
+              <li>
+                <button>
+                  <Profile />
+                </button>
+                <span>Profile</span>
+              </li>
+              <li>
+                <button>
+                  <Bell />
+                </button>
+                <span>Mute</span>
+              </li>
+              <li>
+                <button>
+                  <Search />
+                </button>
+                <span>Search</span>
+              </li>
+            </ul>
+
+            <div className="profile-options">
+              <Collapsible trigger="Chat Info">
+                <p>
+                  This is the collapsible content. It can be any element or
+                  React component you like.
+                </p>
+                <p>
+                  It can even be another Collapsible component. Check out the
+                  next section!
+                </p>
+              </Collapsible>
+              <Collapsible trigger="Customize Chat">
+                <p>
+                  This is the collapsible content. It can be any element or
+                  React component you like.
+                </p>
+                <p>
+                  It can even be another Collapsible component. Check out the
+                  next section!
+                </p>
+              </Collapsible>
+              <Collapsible trigger="Media, files and links">
+                <p>
+                  This is the collapsible content. It can be any element or
+                  React component you like.
+                </p>
+                <p>
+                  It can even be another Collapsible component. Check out the
+                  next section!
+                </p>
+              </Collapsible>
+              <Collapsible trigger="Privacy & Support">
+                <p>
+                  This is the collapsible content. It can be any element or
+                  React component you like.
+                </p>
+                <p>
+                  It can even be another Collapsible component. Check out the
+                  next section!
+                </p>
+              </Collapsible>
+            </div>
+          </div>
+        </div>
       </div>
     </>
   );
