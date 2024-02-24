@@ -11,6 +11,7 @@ import {
 } from "../helpers/helpers.js";
 import { sendSMS } from "../utils/sendSMS.js";
 import { ActivationEmail } from "../mails/ActivationEmail.js";
+import { cloudUpload } from "../utils/cloudinary.js";
 
 /**
  * @DESC User Login
@@ -546,4 +547,25 @@ export const resetPasswordAction = asyncHandler(async (req, res) => {
   resetUser.accessToken = null;
   resetUser.save();
   return res.status(200).json({ message: "Password Updated" });
+});
+
+/**
+ * Password Reset Action
+ */
+export const uploadProfilePhoto = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  // upload file
+  const file = await cloudUpload(req);
+
+  // now find user
+  const user = await User.findByIdAndUpdate(
+    id,
+    {
+      photo: file.secure_url,
+    },
+    { new: true }
+  );
+
+  res.status(201).json({ message: "Profile Photo Updated", user });
 });

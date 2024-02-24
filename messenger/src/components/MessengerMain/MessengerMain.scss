@@ -117,6 +117,15 @@
           object-fit: cover;
         }
 
+        .chakra-avatar {
+          width: 70px;
+          height: 70px;
+          border-radius: 50%;
+          object-fit: cover;
+          background-color: #ccc;
+          font-size: 22px;
+        }
+
         .user-details {
           display: flex;
           flex-direction: column;

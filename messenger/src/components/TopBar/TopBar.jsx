@@ -9,6 +9,7 @@ import useDropdownPopupControl from "../../hooks/useDropdownPopupControl";
 import useAuthUser from "../../hooks/useAuthUser";
 import { useDispatch } from "react-redux";
 import { logoutUser } from "../../features/auth/authApiSlice";
+import { Avatar } from "@chakra-ui/avatar";
 
 const TopBar = () => {
   const { isOpen, toggleMenu } = useDropdownPopupControl();
@@ -62,14 +63,16 @@ const TopBar = () => {
           </div>
           <div className="topbar-user">
             <button onClick={toggleMenu}>
-              {user.photo ? (
-                <img src={user.photo} />
-              ) : (
-                <img
-                  src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8dXNlcnxlbnwwfHwwfHx8MA%3D%3D"
-                  alt=""
-                />
-              )}
+              <Avatar
+                style={{
+                  width: "50px",
+                  height: "50px",
+                  backgroundColor: "#ccc",
+                  borderRadius: "50%",
+                }}
+                name={user.name}
+                src={user.photo}
+              />
             </button>
 
             {isOpen && (
@@ -82,9 +85,9 @@ const TopBar = () => {
                     </Link>
                   </li>
                   <li>
-                    <Link to="/">
+                    <Link to="/profile-edit">
                       <CiEdit />
-                      Edit
+                      Edit Profile
                     </Link>
                   </li>
                   <li>

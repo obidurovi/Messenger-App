@@ -3,9 +3,9 @@ import fs from "fs";
 
 // config cloudinary
 cloudinary.v2.config({
-  cloud_name: "dis89p0kx",
-  api_key: "179378785211637",
-  api_secret: "fjH24wym4yj0jxJRXm-2Bh7EbLw",
+  cloud_name: "dsozlzmap",
+  api_key: "837175438671147",
+  api_secret: "SBCedwuDPJL1lGvs4urWY_bWcaY",
 });
 
 export const cloudUpload = async (req) => {

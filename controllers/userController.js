@@ -9,11 +9,15 @@ import User from "../models/User.js";
  * @access public
  */
 export const getAllUser = asyncHandler(async (req, res) => {
-  const users = await User.find().populate("role");
+  const users = await User.find({
+    accessToken: null,
+  }).select("-password");
 
-  if (users.length > 0) {
-    res.status(200).json(users);
+  if (users.length == 0) {
+    return res.status(404).json({ message: "User not found!" });
   }
+
+  res.status(200).json({ users });
 });
 
 /**

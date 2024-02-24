@@ -1,3 +1,4 @@
+import Profile from "../pages/auth/Profile";
 import Messenger from "../pages/messenger/Messenger";
 import PrivateGard from "./PrivateGard";
 
@@ -9,6 +10,10 @@ const privateRouter = [
       {
         path: "/",
         element: <Messenger />,
+      },
+      {
+        path: "/profile-edit",
+        element: <Profile />,
       },
     ],
   },

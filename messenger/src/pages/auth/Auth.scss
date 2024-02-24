@@ -22,6 +22,47 @@
       align-items: center;
       gap: 20px;
 
+      .profile-photo-wrap {
+        width: 200px;
+        height: 200px;
+        background-color: #ccc;
+        font-size: 100px;
+        border-radius: 50%;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+
+        &:hover {
+          .profile-photo-upload {
+            transform: translate(0, -50px);
+          }
+        }
+
+        .profile-photo-upload {
+          height: 50px;
+          width: 200px;
+          display: block;
+          cursor: pointer;
+          font-size: 14px;
+          line-height: 30px;
+          background-color: rgba(0, 0, 0, 0.5);
+          transition: all 0.5s;
+          color: white;
+          input {
+            display: none;
+          }
+        }
+
+        span {
+          line-height: 200px;
+
+          img {
+            width: 200px;
+            height: 200px;
+          }
+        }
+      }
+
       .auth-form {
         width: 400px;
 

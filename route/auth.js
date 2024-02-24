@@ -10,8 +10,10 @@ import {
   resendAccountActivation,
   resetPassword,
   resetPasswordAction,
+  uploadProfilePhoto,
 } from "../controllers/authController.js";
 import tokenVerify from "../middlewares/verifyToken.js";
+import { userProfilePhoto } from "../utils/multer.js";
 
 const router = express.Router();
 
@@ -25,6 +27,9 @@ router.route("/activation-by-link/:token").post(accountActivateByLink);
 router.route("/resend-activation/:auth").get(resendAccountActivation);
 router.route("/password-reset").post(resetPassword);
 router.route("/password-reset-action/:token").post(resetPasswordAction);
+router
+  .route("/profile-photo-upload/:id")
+  .post(userProfilePhoto, uploadProfilePhoto);
 
 router.get("/me", tokenVerify, loggedInUser);
 
