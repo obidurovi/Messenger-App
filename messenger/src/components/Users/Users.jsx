@@ -8,7 +8,7 @@ import { setMessageEmpty } from "../../features/user/userSlice";
 import { getAllUser } from "../../features/user/userApiSlice";
 import { Avatar } from "@chakra-ui/avatar";
 
-const Users = () => {
+const Users = ({ setActiveChat, activeChat }) => {
   const dispatch = useDispatch();
   const { users, error, message } = useSelector((state) => state.user);
 
@@ -56,8 +56,14 @@ const Users = () => {
       <div className="chat-users-list">
         {users?.map((item, index) => {
           return (
-            <div className="user-item" key={index}>
-              <Avatar name={item?.name} src={null} />
+            <div
+              className={`user-item ${
+                item._id === activeChat?._id ? "active" : ""
+              }`}
+              key={index}
+              onClick={() => setActiveChat(item)}
+            >
+              <Avatar name={item?.name} src={item.photo} />
               <div className="user-details">
                 <span className="user-name">{item.name}</span>
                 <span className="user-chat-info">

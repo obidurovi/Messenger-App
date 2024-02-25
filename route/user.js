@@ -11,7 +11,7 @@ import tokenVerify from "../middlewares/verifyToken.js";
 const router = express.Router();
 
 // use verify token
-// router.use(tokenVerify);
+router.use(tokenVerify);
 
 // create route
 
