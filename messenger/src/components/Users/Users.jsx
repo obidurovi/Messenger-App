@@ -12,6 +12,10 @@ const Users = ({ setActiveChat, activeChat }) => {
   const dispatch = useDispatch();
   const { users, error, message } = useSelector((state) => state.user);
 
+  const handleActiveChat = (item) => {
+    setActiveChat(item);
+  };
+
   useEffect(() => {
     dispatch(getAllUser());
   }, [dispatch]);
@@ -61,7 +65,7 @@ const Users = ({ setActiveChat, activeChat }) => {
                 item._id === activeChat?._id ? "active" : ""
               }`}
               key={index}
-              onClick={() => setActiveChat(item)}
+              onClick={() => handleActiveChat(item)}
             >
               <Avatar name={item?.name} src={item.photo} />
               <div className="user-details">

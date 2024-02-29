@@ -9,8 +9,8 @@ router.use(tokenVerify);
 
 // create route
 
-router.route("/").get(getAllChat).post(createChat);
-// router.route("/:id").get(getSingleUser).delete(deleteUser).put(updateUser);
+router.route("/").post(createChat);
+router.route("/:id").get(getAllChat);
 
 // export default router
 export default router;

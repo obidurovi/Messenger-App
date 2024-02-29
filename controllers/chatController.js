@@ -9,7 +9,30 @@ import Chat from "../models/Chat.js";
  * @access public
  */
 export const getAllChat = asyncHandler(async (req, res) => {
-  res.status(200).json({ chat: "All chat done" });
+  const senderId = req.me._id;
+  const receiverId = req.params.id;
+
+  // get chats
+  const getAllChats = await Chat.find({
+    $or: [
+      {
+        $and: [
+          { senderId: { $eq: senderId } },
+          { receiverId: { $eq: receiverId } },
+        ],
+      },
+      {
+        $and: [
+          { senderId: { $eq: receiverId } },
+          { receiverId: { $eq: senderId } },
+        ],
+      },
+    ],
+  });
+
+  res.status(200).json({
+    chats: getAllChats,
+  });
 });
 
 /**
@@ -28,5 +51,9 @@ export const createChat = asyncHandler(async (req, res) => {
     },
     senderId,
     receiverId,
+  });
+
+  res.status(201).json({
+    chat: chatMsg,
   });
 });

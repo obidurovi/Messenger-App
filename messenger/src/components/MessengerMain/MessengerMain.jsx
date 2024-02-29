@@ -18,17 +18,26 @@ import Bell from "../../svgs/Bell";
 import Search from "../../svgs/Search";
 import Collapsible from "react-collapsible";
 import Users from "../Users/Users";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Avatar } from "@chakra-ui/avatar";
-import { useDispatch } from "react-redux";
-import { createChat } from "../../features/chat/chatApiSlice";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  createChat,
+  getUserToUserChat,
+} from "../../features/chat/chatApiSlice";
+import useAuthUser from "../../hooks/useAuthUser";
 
 const MessengerMain = () => {
   const [chat, setChat] = useState("");
   const dispatch = useDispatch();
+  const { chats } = useSelector((state) => state.chat);
+
+  const scrollChat = useRef();
+
+  const { user } = useAuthUser();
 
   const { isOpen, toggleMenu } = useDropdownPopupControl();
-  const [activeChat, setActiveChat] = useState();
+  const [activeChat, setActiveChat] = useState(false);
 
   const handleMessageSent = (e) => {
     if (e.key === "Enter") {
@@ -43,10 +52,22 @@ const MessengerMain = () => {
     }
   };
 
+  useEffect(() => {
+    dispatch(getUserToUserChat(activeChat._id));
+  }, [activeChat, dispatch]);
+
+  useEffect(() => {
+    scrollChat.current?.scrollIntoView({ behavior: "smooth" });
+  }, [chats]);
+
   return (
     <>
       <div className="chat-container">
-        <Users setActiveChat={setActiveChat} activeChat={activeChat} />
+        <Users
+          setActiveChat={setActiveChat}
+          activeChat={activeChat}
+          scrollChat={scrollChat}
+        />
         <div className="chat-body">
           {activeChat ? (
             <>
@@ -74,116 +95,44 @@ const MessengerMain = () => {
                   <span className="chat-user-name">{activeChat?.name}</span>
                 </div>
                 <div className="chat-msg-list">
-                  <div className="my-msg">
-                    <div className="msg-txt">Hello, How are you?</div>
-                    <div className="msg-photo">
-                      <img
-                        src="https://www.ultimatebeaver.com/wp-content/uploads/2021/04/photo-gallery-img-02.jpg"
-                        alt=""
-                      />
-                    </div>
-                  </div>
-                  <div className="msg-time">
-                    <span>2:54PM</span>
-                  </div>
-                  <div className="friend-msg">
-                    <img
-                      src="https://powerpackelements.com/wp-content/uploads/2017/11/Team-memeber-01.png"
-                      alt=""
-                    />
-                    <div className="friend-msg-details">
-                      <div className="msg-txt">Hello, How are you?</div>
-                      <div className="msg-photo"></div>
-                    </div>
-                  </div>
-                  <div className="my-msg">
-                    <div className="msg-txt">Hello, How are you?</div>
-                    <div className="msg-photo">
-                      <img
-                        src="https://www.ultimatebeaver.com/wp-content/uploads/2021/04/photo-gallery-img-02.jpg"
-                        alt=""
-                      />
-                    </div>
-                  </div>
-                  <div className="msg-time">
-                    <span>2:54PM</span>
-                  </div>
-                  <div className="friend-msg">
-                    <img
-                      src="https://powerpackelements.com/wp-content/uploads/2017/11/Team-memeber-01.png"
-                      alt=""
-                    />
-                    <div className="friend-msg-details">
-                      <div className="msg-txt">Hello, How are you?</div>
-                      <div className="msg-photo"></div>
-                    </div>
-                  </div>
-                  <div className="my-msg">
-                    <div className="msg-txt">Hello, How are you?</div>
-                    <div className="msg-photo">
-                      <img
-                        src="https://www.ultimatebeaver.com/wp-content/uploads/2021/04/photo-gallery-img-02.jpg"
-                        alt=""
-                      />
-                    </div>
-                  </div>
-                  <div className="msg-time">
-                    <span>2:54PM</span>
-                  </div>
-                  <div className="friend-msg">
-                    <img
-                      src="https://powerpackelements.com/wp-content/uploads/2017/11/Team-memeber-01.png"
-                      alt=""
-                    />
-                    <div className="friend-msg-details">
-                      <div className="msg-txt">Hello, How are you?</div>
-                      <div className="msg-photo"></div>
-                    </div>
-                  </div>
-                  <div className="my-msg">
-                    <div className="msg-txt">Hello, How are you?</div>
-                    <div className="msg-photo">
-                      <img
-                        src="https://www.ultimatebeaver.com/wp-content/uploads/2021/04/photo-gallery-img-02.jpg"
-                        alt=""
-                      />
-                    </div>
-                  </div>
-                  <div className="msg-time">
-                    <span>2:54PM</span>
-                  </div>
-                  <div className="friend-msg">
-                    <img
-                      src="https://powerpackelements.com/wp-content/uploads/2017/11/Team-memeber-01.png"
-                      alt=""
-                    />
-                    <div className="friend-msg-details">
-                      <div className="msg-txt">Hello, How are you?</div>
-                      <div className="msg-photo"></div>
-                    </div>
-                  </div>
-                  <div className="my-msg">
-                    <div className="msg-txt">Hello, How are you?</div>
-                    <div className="msg-photo">
-                      <img
-                        src="https://www.ultimatebeaver.com/wp-content/uploads/2021/04/photo-gallery-img-02.jpg"
-                        alt=""
-                      />
-                    </div>
-                  </div>
-                  <div className="msg-time">
-                    <span>2:54PM</span>
-                  </div>
-                  <div className="friend-msg">
-                    <img
-                      src="https://powerpackelements.com/wp-content/uploads/2017/11/Team-memeber-01.png"
-                      alt=""
-                    />
-                    <div className="friend-msg-details">
-                      <div className="msg-txt">Hello, How are you?</div>
-                      <div className="msg-photo"></div>
-                    </div>
-                  </div>
+                  {chats.length > 0
+                    ? chats.map((item, index) => {
+                        return (
+                          <>
+                            {item.senderId === user._id ? (
+                              <div className="my-msg" ref={scrollChat}>
+                                <div className="msg-txt">
+                                  {item.message.text}
+                                </div>
+                                <div className="msg-photo">
+                                  {/* <img
+                                    src="https://www.ultimatebeaver.com/wp-content/uploads/2021/04/photo-gallery-img-02.jpg"
+                                    alt=""
+                                  /> */}
+                                </div>
+                              </div>
+                            ) : (
+                              <div className="friend-msg">
+                                <Avatar
+                                  name={activeChat?.name}
+                                  src={activeChat?.photo}
+                                />
+                                <div className="friend-msg-details">
+                                  <div className="msg-txt">
+                                    {item.message.text}
+                                  </div>
+                                  <div className="msg-photo"></div>
+                                </div>
+                              </div>
+                            )}
+
+                            <div className="msg-time">
+                              <span>2:54PM</span>
+                            </div>
+                          </>
+                        );
+                      })
+                    : ""}
                 </div>
               </div>
 

@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { createChat, getUserToUserChat } from "./chatApiSlice";
 
 // create auth slice
 const chatSlice = createSlice({
@@ -14,7 +15,15 @@ const chatSlice = createSlice({
       state.error = null;
     },
   },
-  extraReducers: (builder) => {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(getUserToUserChat.fulfilled, (state, action) => {
+        state.chats = action.payload.chats;
+      })
+      .addCase(createChat.fulfilled, (state, action) => {
+        state.chats = [...state.chats, action.payload.chat];
+      });
+  },
 });
 
 // selectors

@@ -219,7 +219,7 @@
             border-radius: 10px;
             background-color: var(--messenger-blue);
             color: #fff;
-            max-width: 30%;
+            max-width: 50%;
           }
 
           .msg-photo {
@@ -249,10 +249,11 @@
           }
 
           .friend-msg-details {
+            max-width: 40%;
             .msg-txt {
               background-color: var(--messenger-gray);
               padding: 10px;
-              width: 180px; //Should be change
+              display: table;
               border-radius: 10px;
             }
           }
