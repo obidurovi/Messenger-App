@@ -12,3 +12,4 @@ const storage = multer.diskStorage({
 
 // multer for brand logo
 export const userProfilePhoto = multer({ storage }).single("profile-photo");
+export const userChatPhoto = multer({ storage }).single("chat-image");

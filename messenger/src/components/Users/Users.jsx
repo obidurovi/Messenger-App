@@ -67,6 +67,10 @@ const Users = ({ setActiveChat, activeChat }) => {
               key={index}
               onClick={() => handleActiveChat(item)}
             >
+              {activeUser.some((data) => data.userId === item._id) && (
+                <div className="user-status active"></div>
+              )}
+
               <Avatar name={item?.name} src={item.photo} />
               <div className="user-details">
                 <span className="user-name">{item.name}</span>

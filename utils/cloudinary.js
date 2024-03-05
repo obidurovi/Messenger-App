@@ -10,7 +10,7 @@ cloudinary.v2.config({
 
 export const cloudUpload = async (req) => {
   // upload brand logo
-  const data = await cloudinary.v2.uploader.upload(req.file.path);
+  const data = await cloudinary.v2.uploader.upload(req?.file?.path);
   return data;
 };
 

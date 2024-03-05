@@ -1,6 +1,7 @@
 import asyncHandler from "express-async-handler";
 import bcrypt from "bcrypt";
 import Chat from "../models/Chat.js";
+import { cloudUpload } from "../utils/cloudinary.js";
 
 /**
  * @DESC Get all chat data
@@ -45,13 +46,27 @@ export const createChat = asyncHandler(async (req, res) => {
   const { chat, receiverId } = req.body;
   const senderId = req.me._id;
 
-  const chatMsg = await Chat.create({
-    message: {
-      text: chat,
-    },
-    senderId,
-    receiverId,
-  });
+  let chatMsg;
+  if (req.file) {
+    const photoData = await cloudUpload(req);
+    chatMsg = await Chat.create({
+      message: {
+        text: chat,
+        photo: photoData.secure_url,
+      },
+      senderId,
+      receiverId,
+    });
+  } else {
+    chatMsg = await Chat.create({
+      message: {
+        text: chat,
+        photo: "",
+      },
+      senderId,
+      receiverId,
+    });
+  }
 
   res.status(201).json({
     chat: chatMsg,

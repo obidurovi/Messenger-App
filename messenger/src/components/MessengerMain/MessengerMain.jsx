@@ -26,11 +26,16 @@ import {
   getUserToUserChat,
 } from "../../features/chat/chatApiSlice";
 import useAuthUser from "../../hooks/useAuthUser";
+import { io } from "socket.io-client";
 
 const MessengerMain = () => {
   const [chat, setChat] = useState("");
+  const { activeUser, setActiveUser } = useState([]);
+  const [chatImage, setChatImage] = useState(null);
   const dispatch = useDispatch();
   const { chats } = useSelector((state) => state.chat);
+
+  const socket = useRef();
 
   const scrollChat = useRef();
 
@@ -41,16 +46,35 @@ const MessengerMain = () => {
 
   const handleMessageSent = (e) => {
     if (e.key === "Enter") {
-      dispatch(
-        createChat({
-          chat: chat,
-          receiverId: activeChat._id,
-        })
-      );
+      const form_data = new FormData();
+
+      form_data.append("chat", chat);
+      form_data.append("receiverId", activeChat._id);
+      form_data.append("chat-image", chatImage);
+
+      dispatch(createChat(form_data));
 
       setChat("");
+      setChatImage(null);
     }
   };
+
+  // handle change change image
+  const handleChatPhoto = (e) => {
+    setChatImage(e.target.files[0]);
+  };
+
+  useEffect(() => {
+    socket.current = io("ws://localhost:9000");
+
+    // set loggedin users
+    socket.current.emit("setActiveUser", user);
+
+    // get active users
+    socket.current.on("getActiveUser", (data) => {
+      setActiveUser(data);
+    });
+  }, []);
 
   useEffect(() => {
     dispatch(getUserToUserChat(activeChat._id));
@@ -67,6 +91,7 @@ const MessengerMain = () => {
           setActiveChat={setActiveChat}
           activeChat={activeChat}
           scrollChat={scrollChat}
+          activeUser={activeUser}
         />
         <div className="chat-body">
           {activeChat ? (
@@ -101,27 +126,30 @@ const MessengerMain = () => {
                           <>
                             {item.senderId === user._id ? (
                               <div className="my-msg" ref={scrollChat}>
-                                <div className="msg-txt">
-                                  {item.message.text}
-                                </div>
-                                <div className="msg-photo">
-                                  {/* <img
-                                    src="https://www.ultimatebeaver.com/wp-content/uploads/2021/04/photo-gallery-img-02.jpg"
-                                    alt=""
-                                  /> */}
-                                </div>
-                              </div>
-                            ) : (
-                              <div className="friend-msg">
-                                <Avatar
-                                  name={activeChat?.name}
-                                  src={activeChat?.photo}
-                                />
-                                <div className="friend-msg-details">
+                                {item?.message?.text && (
                                   <div className="msg-txt">
                                     {item.message.text}
                                   </div>
-                                  <div className="msg-photo"></div>
+                                )}
+
+                                <div className="msg-photo">
+                                  <img src={item?.message?.photo} alt="" />
+                                </div>
+                              </div>
+                            ) : (
+                              <div className="friend-msg" ref={scrollChat}>
+                                <img src={activeChat.photo} alt="" />
+                                <div className="friend-msg-details">
+                                  {item?.message?.text && (
+                                    <div className="msg-txt">
+                                      {item.message.text}
+                                    </div>
+                                  )}
+                                  {item?.message?.photo && (
+                                    <div className="msg-photo">
+                                      <img src={item?.message?.photo} alt="" />
+                                    </div>
+                                  )}
                                 </div>
                               </div>
                             )}
@@ -143,7 +171,15 @@ const MessengerMain = () => {
                       <Plus />
                     </li>
                     <li>
-                      <Gallery />
+                      <label>
+                        <Gallery />
+                        <input
+                          id="chat-image"
+                          type="file"
+                          style={{ display: "none" }}
+                          onChange={handleChatPhoto}
+                        />
+                      </label>
                     </li>
                     <li>
                       <Sticker />
@@ -161,6 +197,7 @@ const MessengerMain = () => {
                     value={chat}
                     onKeyDown={handleMessageSent}
                   />
+
                   {isOpen && (
                     <div className="chat-emoji-picker">
                       <EmojiPicker />

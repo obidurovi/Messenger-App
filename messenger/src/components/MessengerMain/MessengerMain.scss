@@ -105,6 +105,23 @@
         cursor: pointer;
         padding: 10px;
         border-radius: 5px;
+        position: relative;
+
+        .user-status {
+          width: 15px;
+          height: 15px;
+          background-color: gray;
+          border-radius: 50%;
+          position: absolute;
+          left: 60px;
+          top: 62px;
+          z-index: 9999;
+          border: 2px solid #fff;
+        }
+
+        .user-status.active {
+          background-color: #14ad37;
+        }
 
         &:hover {
           background-color: var(--messenger-gray);
@@ -240,7 +257,8 @@
         .friend-msg {
           display: flex;
           gap: 10px;
-          img {
+
+          > img {
             width: 30px;
             height: 30px;
             border-radius: 50%;
@@ -255,6 +273,15 @@
               padding: 10px;
               display: table;
               border-radius: 10px;
+            }
+
+            .msg-photo {
+              display: flex;
+              justify-content: flex-end;
+              img {
+                width: 300px;
+                border-radius: 10px;
+              }
             }
           }
         }

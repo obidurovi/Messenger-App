@@ -1,6 +1,7 @@
 import express from "express";
 import tokenVerify from "../middlewares/verifyToken.js";
 import { createChat, getAllChat } from "../controllers/chatController.js";
+import { userChatPhoto } from "../utils/multer.js";
 
 const router = express.Router();
 
@@ -9,7 +10,7 @@ router.use(tokenVerify);
 
 // create route
 
-router.route("/").post(createChat);
+router.route("/").post(userChatPhoto, createChat);
 router.route("/:id").get(getAllChat);
 
 // export default router
